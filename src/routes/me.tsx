@@ -10,7 +10,6 @@ type MyUserResponse = {
 
 export async function loader() {
   const token = cookies.get("token");
-  console.log({ token });
 
   const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/me`, {
     headers: {
