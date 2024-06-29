@@ -9,6 +9,7 @@ import { HomeRoute, loader as homeLoader } from "./routes/home";
 import { RegisterRoute, action as registerAction } from "./routes/register";
 import { LoginRoute, action as loginAction } from "./routes/login";
 import { MeRoute, loader as meLoader } from "./routes/me";
+import { CartRoute, loader as cartLoader } from "./routes/cart";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +38,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/cart",
-        // element: <CartRoute />,
+        element: <CartRoute />,
+        loader: cartLoader,
       },
     ],
   },

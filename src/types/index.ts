@@ -28,6 +28,8 @@ export type Order = {
   userId: string | null;
   status: string;
 
+  items: OrderItem[];
+
   createdAt: Date;
   updatedAt: Date;
 };
