@@ -1,26 +1,37 @@
-import { useLoaderData } from "react-router-dom";
-
-import { Product } from "../types";
-
-export async function loader() {
-  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/products`);
-  const products: Product[] = await response.json();
-
-  return { products };
-}
+import { Link, Outlet } from "react-router-dom";
+import { CookiesProvider } from "react-cookie";
 
 export function RootRoute() {
-  const { products } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
-
   return (
-    <main>
-      <h1>Amazing Safari</h1>
+    <CookiesProvider defaultSetOptions={{ path: "/" }}>
+      <header>
+        <h1>Amazing Safari</h1>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/register">Register</Link>
+            </li>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+            <li>
+              <Link to="/me">Me</Link>
+            </li>
+            <li>
+              <Link to="/cart">Cart</Link>
+            </li>
+          </ul>
+        </nav>
+      </header>
 
-      <ul>
-        {products.map((product) => (
-          <li key={product.id}>{product.name}</li>
-        ))}
-      </ul>
-    </main>
+      <hr />
+
+      <main>
+        <Outlet />
+      </main>
+    </CookiesProvider>
   );
 }
