@@ -22,6 +22,16 @@ const router = createBrowserRouter([
         loader: homeLoader,
       },
       {
+        path: "/products",
+        // element: <ProductsRoute />,
+        // loader: productsLoader,
+      },
+      {
+        path: "/products/:slug",
+        // element: <ProductSlugRoute />,
+        // loader: productSlugLoader,
+      },
+      {
         path: "/register",
         element: <RegisterRoute />,
         action: registerAction,
