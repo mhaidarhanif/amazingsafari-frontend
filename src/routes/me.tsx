@@ -11,9 +11,12 @@ type MyUserResponse = {
 export async function loader() {
   const token = cookies.get("token");
 
-  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/me`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_API_URL}/auth/me`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
   const myUserResponse: MyUserResponse = await response.json();
 
   return { myUserResponse };

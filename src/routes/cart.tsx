@@ -11,7 +11,7 @@ type CartResponse = {
 export async function loader() {
   const token = cookies.get("token");
 
-  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/cart`, {
+  const response = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/cart`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   const cartResponse: CartResponse = await response.json();

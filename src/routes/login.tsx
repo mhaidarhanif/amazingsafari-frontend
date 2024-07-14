@@ -15,7 +15,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   };
 
   const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_URL}/auth/login`,
+    `${import.meta.env.VITE_BACKEND_API_URL}/auth/login`,
     {
       method: "POST",
       body: JSON.stringify(userData),
