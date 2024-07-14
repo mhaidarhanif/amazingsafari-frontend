@@ -4,11 +4,15 @@ import { Product } from "../types";
 import { ProductsGrid } from "@/components/shared/products-grid";
 
 export async function loader() {
-  const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_API_URL}/products`
-  );
-  const products: Product[] = await response.json();
-  return { products };
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_API_URL}/products`
+    );
+    const products: Product[] = await response.json();
+    return { products };
+  } catch (error) {
+    return { products: [] };
+  }
 }
 
 export function HomeRoute() {
