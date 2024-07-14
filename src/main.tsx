@@ -10,6 +10,7 @@ import { RegisterRoute, action as registerAction } from "./routes/register";
 import { LoginRoute, action as loginAction } from "./routes/login";
 import { MeRoute, loader as meLoader } from "./routes/me";
 import { CartRoute, loader as cartLoader } from "./routes/cart";
+import { ProductsRoute, loader as productsLoader } from "./routes/products";
 
 const router = createBrowserRouter([
   {
@@ -23,8 +24,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/products",
-        // element: <ProductsRoute />,
-        // loader: productsLoader,
+        element: <ProductsRoute />,
+        loader: productsLoader,
       },
       {
         path: "/products/:slug",
