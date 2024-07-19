@@ -3,11 +3,11 @@ import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { Product } from "@/types";
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const slug = params.productSlug;
+  const { slug } = params;
 
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_API_URL}/product/${slug}`
+      `${import.meta.env.VITE_BACKEND_API_URL}/products/${slug}`
     );
     const product: Product[] = await response.json();
     return { product };
