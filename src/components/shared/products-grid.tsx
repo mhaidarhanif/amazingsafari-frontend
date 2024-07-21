@@ -17,11 +17,11 @@ export function ProductsGrid({ products }: { products: Product[] }) {
                   alt={product.name}
                   width={200}
                   height={200}
-                  className="rounded-t-lg w-full object-contain"
+                  className="rounded-t-lg w-full object-contain bg-stone-200"
                 />
               </CardHeader>
 
-              <CardContent>
+              <CardContent className="py-4">
                 <h4 className="text-lg font-bold">{product.name}</h4>
                 <p>{convertToIDR(product.price)}</p>
               </CardContent>

@@ -19,8 +19,8 @@ export function HomeRoute() {
   const { products } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
-    <>
+    <div className="p-10">
       <ProductsGrid products={products} />
-    </>
+    </div>
   );
 }
