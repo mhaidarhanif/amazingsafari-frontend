@@ -1,7 +1,7 @@
 import { useLoaderData } from "react-router-dom";
 
 import { Order } from "../types";
-import { cookies } from "../modules/auth";
+import { authCookie } from "../modules/auth";
 
 type CartResponse = {
   message: string;
@@ -9,7 +9,7 @@ type CartResponse = {
 };
 
 export async function loader() {
-  const token = cookies.get("token");
+  const token = authCookie.get("token");
 
   const response = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/cart`, {
     headers: { Authorization: `Bearer ${token}` },

@@ -1,6 +1,26 @@
 import { Link, Outlet } from "react-router-dom";
 import { CookiesProvider } from "react-cookie";
 
+import { User } from "@/types";
+import { authCookie } from "@/modules/auth";
+
+type MyUserResponse = {
+  message: string;
+  user: User;
+};
+
+export async function loader() {
+  const token = authCookie.get("token");
+
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_API_URL}/auth/me`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  const myUserResponse: MyUserResponse = await response.json();
+
+  return { myUserResponse };
+}
+
 export function RootRoute() {
   return (
     <CookiesProvider defaultSetOptions={{ path: "/" }}>

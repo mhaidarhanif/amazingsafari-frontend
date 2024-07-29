@@ -14,6 +14,7 @@ import { ProductsRoute, loader as productsLoader } from "./routes/products";
 import {
   ProductSlugRoute,
   loader as productSlugLoader,
+  action as productSlugAction,
 } from "./routes/product";
 
 const router = createBrowserRouter([
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
         path: "/products/:slug",
         element: <ProductSlugRoute />,
         loader: productSlugLoader,
+        action: productSlugAction,
       },
       {
         path: "/register",

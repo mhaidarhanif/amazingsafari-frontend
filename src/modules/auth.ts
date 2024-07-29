@@ -1,3 +1,3 @@
 import { Cookies } from "react-cookie";
 
-export const cookies = new Cookies(null, { path: "/" });
+export const authCookie = new Cookies(null, { path: "/" });

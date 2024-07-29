@@ -1,5 +1,7 @@
 import { ActionFunctionArgs, Form, redirect } from "react-router-dom";
-import { cookies } from "../modules/auth";
+import { authCookie } from "../modules/auth";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 type LoginResponse = {
   message: string;
@@ -10,8 +12,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
 
   const userData = {
-    username: formData.get("username"),
-    password: formData.get("password"),
+    username: formData.get("username")?.toString(),
+    password: formData.get("password")?.toString(),
   };
 
   const response = await fetch(
@@ -19,9 +21,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     {
       method: "POST",
       body: JSON.stringify(userData),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
     }
   );
   const loginResponse: LoginResponse = await response.json();
@@ -32,27 +32,31 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const token = loginResponse.token;
 
-  cookies.set("token", token);
+  authCookie.set("token", token);
 
-  return redirect("/me");
+  return redirect("/");
 };
 
 export function LoginRoute() {
   return (
-    <main>
-      <h1>Login</h1>
+    <main className="flex justify-center">
+      <div className="space-y-10">
+        <h1>Login</h1>
 
-      <Form method="post">
-        <div>
-          <label htmlFor="username">Username</label>
-          <input id="username" type="text" name="username" required />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input id="password" type="password" name="password" required />
-        </div>
-        <button type="submit">Login</button>
-      </Form>
+        <Form method="post" className="space-y-4">
+          <div>
+            <label htmlFor="username">Username</label>
+            <Input id="username" type="text" name="username" required />
+          </div>
+
+          <div>
+            <label htmlFor="password">Password</label>
+            <Input id="password" type="password" name="password" required />
+          </div>
+
+          <Button type="submit">Login User</Button>
+        </Form>
+      </div>
     </main>
   );
 }

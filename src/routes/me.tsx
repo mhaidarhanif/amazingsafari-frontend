@@ -1,7 +1,7 @@
 import { useLoaderData } from "react-router-dom";
 
 import { User } from "../types";
-import { cookies } from "../modules/auth";
+import { authCookie } from "../modules/auth";
 
 type MyUserResponse = {
   message: string;
@@ -9,13 +9,11 @@ type MyUserResponse = {
 };
 
 export async function loader() {
-  const token = cookies.get("token");
+  const token = authCookie.get("token");
 
   const response = await fetch(
     `${import.meta.env.VITE_BACKEND_API_URL}/auth/me`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
+    { headers: { Authorization: `Bearer ${token}` } }
   );
   const myUserResponse: MyUserResponse = await response.json();
 
