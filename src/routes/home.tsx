@@ -1,13 +1,12 @@
 import { useLoaderData } from "react-router-dom";
 
-import { Product } from "../types";
+import { Product } from "@/types";
 import { ProductsGrid } from "@/components/shared/products-grid";
+import { BACKEND_API_URL } from "@/libs/env";
 
 export async function loader() {
   try {
-    const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_API_URL}/products`
-    );
+    const response = await fetch(`${BACKEND_API_URL}/products`);
     const products: Product[] = await response.json();
     return { products };
   } catch (error) {
@@ -19,8 +18,10 @@ export function HomeRoute() {
   const { products } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
-    <div className="p-10">
-      <ProductsGrid products={products} />
-    </div>
+    <main className="flex justify-center">
+      <div className="p-6 max-w-7xl">
+        <ProductsGrid products={products} />
+      </div>
+    </main>
   );
 }

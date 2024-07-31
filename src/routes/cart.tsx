@@ -1,33 +1,35 @@
-import { useLoaderData } from "react-router-dom";
+import { redirect, useLoaderData } from "react-router-dom";
 
-import { Order } from "../types";
-import { authCookie } from "../modules/auth";
-
-type CartResponse = {
-  message: string;
-  cart: Order;
-};
+import { Cart } from "@/types";
+import { BACKEND_API_URL } from "@/libs/env";
+import { authProvider } from "@/libs/auth";
+import { CartItemsList } from "@/components/shared/cart-items-list";
 
 export async function loader() {
-  const token = authCookie.get("token");
+  await authProvider.checkUser();
+  if (!authProvider.isAuthenticated) return redirect("/login");
 
-  const response = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/cart`, {
-    headers: { Authorization: `Bearer ${token}` },
+  const response = await fetch(`${BACKEND_API_URL}/cart`, {
+    headers: { Authorization: `Bearer ${authProvider.getToken()}` },
   });
-  const cartResponse: CartResponse = await response.json();
 
-  console.log({ cartResponse });
+  const cart: Cart = await response.json();
 
-  return { cart: cartResponse.cart };
+  return { cart };
 }
 
 export function CartRoute() {
-  const { cart } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const data = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+
+  if (data instanceof Response) return null;
 
   return (
-    <>
-      <h2>Shopping Cart</h2>
-      <pre>{JSON.stringify(cart, null, 2)}</pre>
-    </>
+    <main className="flex justify-center">
+      <div className="w-full max-w-2xl pt-10 space-y-6">
+        <h1 className="font-bold text-2xl">Shopping Cart</h1>
+
+        <CartItemsList cartItems={data.cart.items} />
+      </div>
+    </main>
   );
 }

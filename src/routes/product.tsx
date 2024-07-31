@@ -7,49 +7,71 @@ import {
 
 import { Product } from "@/types";
 import { Button } from "@/components/ui/button";
-import { authCookie } from "@/modules/auth";
+import { BACKEND_API_URL } from "@/libs/env";
+import { authProvider } from "@/libs/auth";
+import { convertToIDR } from "@/libs/currency";
+import { Input } from "@/components/ui/input";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { slug } = params;
 
   try {
-    const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_API_URL}/products/${slug}`
-    );
+    const response = await fetch(`${BACKEND_API_URL}/products/${slug}`);
     const product: Product = await response.json();
-    return { product };
+    return { slug, product };
   } catch (error) {
-    return { product: null };
+    return { slug, product: null };
   }
 }
 
 export function ProductSlugRoute() {
-  const { product } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { slug, product } = useLoaderData() as Awaited<
+    ReturnType<typeof loader>
+  >;
 
   if (!product) {
-    return (
-      <div>
-        <p>Product not found.</p>
-      </div>
-    );
+    return <p>Product "{slug}" not found.</p>;
   }
 
   return (
-    <div>
-      <pre>{JSON.stringify(product, null, 2)}</pre>
+    <main className="flex justify-center">
+      <div className="w-full max-w-2xl flex gap-6 pt-10">
+        <img
+          src={product.imageURL}
+          alt={product.name}
+          width={200}
+          height={200}
+          className="rounded-lg w-full max-w-xs object-contain bg-stone-200"
+        />
 
-      <Form method="post">
-        <input type="hidden" name="productId" defaultValue={product.id} />
-        <input type="number" name="quantity" defaultValue={1} />
+        <div className="space-y-6">
+          <h4 className="text-3xl font-bold">{product.name}</h4>
+          <h5 className="text-2xl font-medium">
+            {convertToIDR(product.price)}
+          </h5>
 
-        <Button type="submit">Add to Cart</Button>
-      </Form>
-    </div>
+          <p>{product.description}</p>
+
+          <Form method="post" className="flex gap-2">
+            <input type="hidden" name="productId" defaultValue={product.id} />
+            <Input
+              type="number"
+              name="quantity"
+              defaultValue={1}
+              className="w-20"
+            />
+            <Button type="submit">Add to Cart</Button>
+          </Form>
+        </div>
+      </div>
+    </main>
   );
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const token = authCookie.get("token");
+  const token = authProvider.getToken();
+  if (!token) return null;
+
   const formData = await request.formData();
 
   const addToCartData = {
@@ -57,17 +79,14 @@ export async function action({ request }: ActionFunctionArgs) {
     quantity: Number(formData.get("quantity")),
   };
 
-  const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_API_URL}/cart/items`,
-    {
-      method: "POST",
-      body: JSON.stringify(addToCartData),
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  const response = await fetch(`${BACKEND_API_URL}/cart/items`, {
+    method: "POST",
+    body: JSON.stringify(addToCartData),
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const addToCartResponse: any = await response.json();

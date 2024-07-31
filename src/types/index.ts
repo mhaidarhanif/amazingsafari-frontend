@@ -1,6 +1,7 @@
 export type User = {
   id: string;
 
+  fullname?: string;
   username: string;
   email: string;
 
@@ -22,24 +23,27 @@ export type Product = {
   updatedAt: Date;
 };
 
-export type Order = {
+export type Cart = {
   id: string;
 
   userId: string | null;
   status: string;
 
-  items: OrderItem[];
+  items: CartItem[];
 
   createdAt: Date;
   updatedAt: Date;
 };
 
-export type OrderItem = {
+export type CartItem = {
   id: string;
 
   quantity: number;
+
   productId: string;
-  orderId: string;
+  product: Product;
+
+  cartId: string;
 
   createdAt: Date;
   updatedAt: Date;
