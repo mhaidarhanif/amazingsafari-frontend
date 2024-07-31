@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 
 import { CartItem } from "@/types";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { convertToIDR } from "@/libs/currency";
 import { Button } from "../ui/button";
 

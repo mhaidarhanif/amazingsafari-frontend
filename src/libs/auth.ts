@@ -3,9 +3,8 @@ import { BACKEND_API_URL } from "@/libs/env";
 import { accessToken } from "@/libs/access-token";
 import { UserLogin, UserRegister } from "@/schemas/user";
 
-export type AuthProvider = {
+export type Auth = {
   isAuthenticated: boolean;
-  user: User | null;
   getToken: () => string;
   register(userRegister: UserRegister): Promise<void | null>;
   login(userLogin: UserLogin): Promise<void | null>;
@@ -13,9 +12,8 @@ export type AuthProvider = {
   logout(): void;
 };
 
-export const authProvider: AuthProvider = {
+export const auth: Auth = {
   isAuthenticated: false,
-  user: null,
 
   getToken() {
     return accessToken.get();
@@ -33,17 +31,22 @@ export const authProvider: AuthProvider = {
   },
 
   async login(userLogin: UserLogin) {
-    const response = await fetch(`${BACKEND_API_URL}/auth/login`, {
-      method: "POST",
-      body: JSON.stringify(userLogin),
-      headers: { "Content-Type": "application/json" },
-    });
+    try {
+      const response = await fetch(`${BACKEND_API_URL}/auth/login`, {
+        method: "POST",
+        body: JSON.stringify(userLogin),
+        headers: { "Content-Type": "application/json" },
+      });
 
-    const data: { token: string; user: User } = await response.json();
-    if (!data) return null;
+      const data: { token?: string; user?: User } = await response.json();
+      if (!data.token) return null;
 
-    authProvider.isAuthenticated = true;
-    accessToken.set(data.token);
+      accessToken.set(data.token);
+      auth.isAuthenticated = true;
+    } catch (error) {
+      accessToken.remove();
+      auth.isAuthenticated = false;
+    }
   },
 
   async checkUser() {
@@ -56,21 +59,17 @@ export const authProvider: AuthProvider = {
         });
         const user: User = await response.json();
 
-        authProvider.isAuthenticated = true;
-        authProvider.user = user;
-
+        auth.isAuthenticated = true;
         return user;
       } catch (error) {
         accessToken.remove();
-        authProvider.isAuthenticated = false;
-        authProvider.user = null;
+        auth.isAuthenticated = false;
       }
     }
   },
 
   logout() {
     accessToken.remove();
-    authProvider.isAuthenticated = false;
-    authProvider.user = null;
+    auth.isAuthenticated = false;
   },
 };

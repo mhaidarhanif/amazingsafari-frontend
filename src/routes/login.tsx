@@ -2,7 +2,12 @@ import { ActionFunctionArgs, Form, redirect } from "react-router-dom";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { authProvider } from "@/libs/auth";
+import { auth } from "@/libs/auth";
+
+export async function loader() {
+  if (auth.isAuthenticated) return redirect("/dashboard");
+  return null;
+}
 
 export function LoginRoute() {
   return (
@@ -38,8 +43,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     password: String(formData.get("password")),
   };
 
-  const result = authProvider.login(userLogin);
+  const result = await auth.login(userLogin);
   if (!result) return null;
 
-  return redirect("/");
+  return redirect("/dashboard");
 };

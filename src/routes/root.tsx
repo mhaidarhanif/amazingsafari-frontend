@@ -3,16 +3,17 @@ import { CookiesProvider } from "react-cookie";
 
 import { SiteNavigation } from "@/components/shared/site-navigation";
 import { SiteFooter } from "@/components/shared/site-footer";
-import { authProvider } from "@/libs/auth";
+import { auth } from "@/libs/auth";
 
 export async function loader() {
-  if (!authProvider.isAuthenticated) {
-    await authProvider.checkUser();
+  const user = await auth.checkUser();
+  if (!auth.isAuthenticated) {
+    await auth.checkUser();
   }
 
   return {
-    isAuthenticated: authProvider.isAuthenticated,
-    user: authProvider.user,
+    isAuthenticated: auth.isAuthenticated,
+    user: user,
   };
 }
 

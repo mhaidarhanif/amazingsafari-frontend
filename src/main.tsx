@@ -5,12 +5,22 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "@/index.css";
 
 import { RootRoute, loader as rootLoader } from "@/routes/root";
+import { ErrorPage } from "@/routes/error-page";
 import { HomeRoute, loader as homeLoader } from "@/routes/home";
-import { RegisterRoute, action as registerAction } from "@/routes/register";
-import { LoginRoute, action as loginAction } from "@/routes/login";
+import {
+  RegisterRoute,
+  loader as registerLoader,
+  action as registerAction,
+} from "@/routes/register";
+import {
+  LoginRoute,
+  loader as loginLoader,
+  action as loginAction,
+} from "@/routes/login";
 import {
   UserDashboardRoute,
   loader as userDashboardLoader,
+  action as userDashboardAction,
 } from "@/routes/user-dashboard";
 import { CartRoute, loader as cartLoader } from "@/routes/cart";
 import { ProductsRoute, loader as productsLoader } from "@/routes/products";
@@ -19,7 +29,6 @@ import {
   loader as productSlugLoader,
   action as productSlugAction,
 } from "@/routes/product";
-import { ErrorPage } from "@/routes/error-page";
 
 const router = createBrowserRouter([
   {
@@ -48,17 +57,20 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <RegisterRoute />,
+        loader: registerLoader,
         action: registerAction,
       },
       {
         path: "/login",
         element: <LoginRoute />,
+        loader: loginLoader,
         action: loginAction,
       },
       {
         path: "/dashboard",
         element: <UserDashboardRoute />,
         loader: userDashboardLoader,
+        action: userDashboardAction,
       },
       {
         path: "/cart",

@@ -8,7 +8,7 @@ import {
 import { Product } from "@/types";
 import { Button } from "@/components/ui/button";
 import { BACKEND_API_URL } from "@/libs/env";
-import { authProvider } from "@/libs/auth";
+import { auth } from "@/libs/auth";
 import { convertToIDR } from "@/libs/currency";
 import { Input } from "@/components/ui/input";
 
@@ -69,7 +69,7 @@ export function ProductSlugRoute() {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const token = authProvider.getToken();
+  const token = auth.getToken();
   if (!token) return null;
 
   const formData = await request.formData();
@@ -91,9 +91,7 @@ export async function action({ request }: ActionFunctionArgs) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const addToCartResponse: any = await response.json();
 
-  if (!addToCartResponse) {
-    return null;
-  }
+  if (!addToCartResponse) return null;
 
   return null;
 }

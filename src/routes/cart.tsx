@@ -2,15 +2,15 @@ import { redirect, useLoaderData } from "react-router-dom";
 
 import { Cart } from "@/types";
 import { BACKEND_API_URL } from "@/libs/env";
-import { authProvider } from "@/libs/auth";
+import { auth } from "@/libs/auth";
 import { CartItemsList } from "@/components/shared/cart-items-list";
 
 export async function loader() {
-  await authProvider.checkUser();
-  if (!authProvider.isAuthenticated) return redirect("/login");
+  await auth.checkUser();
+  if (!auth.isAuthenticated) return redirect("/login");
 
   const response = await fetch(`${BACKEND_API_URL}/cart`, {
-    headers: { Authorization: `Bearer ${authProvider.getToken()}` },
+    headers: { Authorization: `Bearer ${auth.getToken()}` },
   });
 
   const cart: Cart = await response.json();

@@ -1,11 +1,11 @@
-import { redirect, useLoaderData } from "react-router-dom";
+import { Form, redirect, useLoaderData } from "react-router-dom";
 
-import { authProvider } from "@/libs/auth";
+import { auth } from "@/libs/auth";
+import { Button } from "@/components/ui/button";
 
 export async function loader() {
-  const user = await authProvider.checkUser();
+  const user = await auth.checkUser();
   if (!user) return redirect("/login");
-
   return { user };
 }
 
@@ -20,7 +20,16 @@ export function UserDashboardRoute() {
         <h1 className="text-2xl font-medium">Welcome, {data.user.username}</h1>
 
         <p>📧 {data.user.email}</p>
+
+        <Form method="post">
+          <Button type="submit">Logout</Button>
+        </Form>
       </div>
     </main>
   );
+}
+
+export async function action() {
+  auth.logout();
+  return redirect("/login");
 }
