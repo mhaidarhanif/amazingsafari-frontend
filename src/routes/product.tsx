@@ -2,6 +2,7 @@ import {
   ActionFunctionArgs,
   Form,
   LoaderFunctionArgs,
+  redirect,
   useLoaderData,
 } from "react-router-dom";
 
@@ -68,6 +69,17 @@ export function ProductSlugRoute() {
   );
 }
 
+type AddToCartResponse = {
+  items: {
+    id: string;
+    productId: string;
+    quantity: number;
+    cartId: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }[];
+};
+
 export async function action({ request }: ActionFunctionArgs) {
   const token = auth.getToken();
   if (!token) return null;
@@ -88,10 +100,9 @@ export async function action({ request }: ActionFunctionArgs) {
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const addToCartResponse: any = await response.json();
+  const addToCartResponse: AddToCartResponse = await response.json();
 
   if (!addToCartResponse) return null;
 
-  return null;
+  return redirect("/cart");
 }

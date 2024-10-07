@@ -6,8 +6,8 @@ import { auth } from "@/libs/auth";
 import { CartItemsList } from "@/components/shared/cart-items-list";
 
 export async function loader() {
-  await auth.checkUser();
-  if (!auth.isAuthenticated) return redirect("/login");
+  const user = await auth.checkUser();
+  if (!user) return redirect("/login");
 
   const response = await fetch(`${BACKEND_API_URL}/cart`, {
     headers: { Authorization: `Bearer ${auth.getToken()}` },

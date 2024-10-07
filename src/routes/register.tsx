@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { auth } from "@/libs/auth";
 
 export async function loader() {
-  if (auth.isAuthenticated) return redirect("/dashboard");
+  const user = await auth.checkUser();
+  if (user) return redirect("/dashboard");
   return null;
 }
 

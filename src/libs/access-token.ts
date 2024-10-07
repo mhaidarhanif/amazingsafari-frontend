@@ -1,11 +1,11 @@
-import { Cookies } from "react-cookie";
+import { Cookies as ReactCookie } from "react-cookie";
 import { TimeSpan, createDate } from "oslo";
 
 import { ACCESS_TOKEN_NAME } from "./env";
 
 const COOKIE_NAME = ACCESS_TOKEN_NAME || "access-token-name";
 
-export const accessTokenCookie = new Cookies(null, {
+export const accessTokenCookie = new ReactCookie(null, {
   path: "/",
   sameSite: "none",
   secure: true,
